@@ -1,0 +1,22 @@
+services:
+parser:
+build: .
+container_name: linetxtparser-dev
+volumes:
+- .:/app
+      # ホストのSSH Agentを共有（コンテナ内でのgit操作用）
+- ${HOME}/.ssh/ssh-agent.sock:/ssh-agent
+environment:
+- SSH_AUTH_SOCK=/ssh-agent
+- PYTHONUNBUFFERED=1
+working_dir: /app
+tty:true
+stdin_open:true
+networks:
+- parser-network
+
+networks:
+parser-network:
+driver: bridge
+driver_opts:
+com.docker.network.driver.mtu:"1400" # WSL2ネットワーク対策
